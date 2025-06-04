@@ -1,2 +1,2 @@
 # ldap_ansible
-playbook ldap pour gérer la connexion des utilisateur à un serveur ldap distants
+playbook ansible pour gérer la connexion des utilisateurs linux à un serveur ldap distants
