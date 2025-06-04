@@ -1,0 +1,11 @@
+---
+- name: Configure LDAP Authentication on Servers
+  hosts: ldap_servers
+  become: yes
+  vars:
+    ldap_server: "10.2.61.182"  # Adresse IP ou FQDN du serveur LDAP
+    ldap_base_dn: "dc=ldap,dc=local"  # Base DN pour les recherches LDAP
+    ldap_bind_dn: "cn=admin,dc=ldap,dc=local"  # DN de l'utilisateur pour lier
+    ldap_bind_password: "user"  # Mot de passe pour l'utilisateur bind
+  roles:
+    - ldap_auth

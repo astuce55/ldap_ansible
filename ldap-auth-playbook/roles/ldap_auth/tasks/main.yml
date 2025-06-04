@@ -1,0 +1,40 @@
+- name: Install necessary packages
+  apt:
+    name: 
+      - libnss-ldap
+      - libpam-ldap
+      - ldap-utils
+      - nslcd
+    state: present
+
+- name: Configure /etc/ldap/ldap.conf
+  template:
+    src: ldap.conf.j2
+    dest: /etc/ldap/ldap.conf
+
+- name: Configure /etc/nsswitch.conf
+  template:
+    src: nsswitch.conf.j2
+    dest: /etc/nsswitch.conf
+
+- name: Configure /etc/nslcd.conf
+  template:
+    src: nslcd.conf.j2
+    dest: /etc/nslcd.conf
+  notify:
+    - Restart nslcd
+
+- name: Add pam_mkhomedir to PAM configuration
+  lineinfile:
+    path: "{{ item }}"
+    line: "session optional pam_mkhomedir.so skel=/etc/skel umask=0022"
+    state: present
+  with_items:
+    - /etc/pam.d/common-session
+    - /etc/pam.d/common-session-noninteractive
+
+- name: Restart nslcd service
+  systemd:
+    name: nslcd
+    state: restarted
+    enabled: yes
